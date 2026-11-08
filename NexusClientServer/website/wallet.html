@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexusClient — Wallet</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" href="./img/logo.png">
+<link rel="stylesheet" href="./css/dashboard.css"><link rel="stylesheet" href="./css/topbar.css">
+<style>
+.wallet-hero{position:relative;overflow:hidden}
+.balance-card{position:relative;overflow:hidden;background:radial-gradient(circle at 90% 0,rgba(255,0,0,.09),transparent 32%),linear-gradient(145deg,#121212,#090909)}
+.balance-number{font-family:"Inter",sans-serif;font-weight:600;font-size:clamp(50px,8vw,78px);letter-spacing:-.06em;margin:14px 0 4px}.balance-number span{font-family:"Inter",sans-serif;font-size:18px;color:var(--text-dim);letter-spacing:0;font-weight:500}
+.wallet-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.wallet-card{min-height:230px}
+.wallet-icon{width:42px;height:42px;border:1px solid rgba(255,0,0,.2);background:rgba(255,0,0,.06);border-radius:11px;display:grid;place-items:center;color:#ff8e8e;margin-bottom:18px}
+.wallet-link{display:inline-flex;margin-top:23px}
+@media(max-width:760px){.wallet-grid{grid-template-columns:1fr}}
+</style>  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner"><a class="top-logo" href="/dashboard.html"><img src="./img/logo.png" alt=""><span>NexusClient</span></a><nav class="topnav" data-topnav></nav><div data-auth-actions></div></div></header>
+<main class="dashboard"><div class="wrap">
+<section class="hero wallet-hero"><div><p class="eyebrow">WALLET</p><h1>Your <span>Coins</span></h1><p class="subtitle">Your balance is ready for purchases in the NexusClient Store.</p></div></section>
+<section class="wallet-grid">
+<article class="card wallet-card balance-card"><p class="label">CURRENT BALANCE</p><div id="coins" class="balance-number">0 <span>coins</span></div><p class="card-text">Available on your account right now.</p></article>
+<article class="card wallet-card"><div class="wallet-icon">+</div><p class="label">TOP UP</p><h2>Need more coins?</h2><p class="card-text">Contact us on Telegram to purchase or top up your balance.</p><a class="primary-btn wallet-link" href="https://t.me/@Einzelhandelskaufmann" target="_blank" rel="noopener">Open Telegram <span>→</span></a></article>
+</section></div></main>
+<script src="/nav.js"></script><script>
+fetch('/api/wallet',{credentials:'same-origin',cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>document.getElementById('coins').innerHTML=`${Number(d.coins||0)} <span>coins</span>`).catch(()=>location='/login.html');
+</script><footer><div class="wrap">© 2026 NexusClient</div></footer>
+</body></html>

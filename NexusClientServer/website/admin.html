@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexusClient — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" href="./img/logo.png">
+<link rel="stylesheet" href="./css/dashboard.css">
+<link rel="stylesheet" href="./css/topbar.css">
+<link rel="stylesheet" href="./css/admin.css">
+  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="top-logo" href="/dashboard.html"><img src="./img/logo.png" alt="NexusClient"><span>NexusClient</span></a>
+    <nav class="topnav" data-topnav></nav>
+    <div data-auth-actions></div>
+  </div>
+</header>
+
+<main class="admin-wrap">
+  <section class="admin-head">
+    <div>
+      <p class="eyebrow">ADMINISTRATION</p>
+      <h1>Control <span>Center</span></h1>
+      <p class="subtitle">Manage users, balances and account access from one dashboard.</p>
+    </div>
+    <div class="admin-badge">Owner</div>
+  </section>
+
+  <section class="admin-grid">
+    <article class="admin-card wide">
+      <div id="refreshUsers" class="section-head">
+      </div>
+
+      <div class="user-layout">
+        <div class="user-table-wrap">
+          <div class="user-table-head">
+            <span>Username</span><span>IP</span><span>HWID</span><span>Acc Creation</span><span>Coins</span>
+          </div>
+          <div id="userList" class="user-list">Loading users...</div>
+        </div>
+
+        <aside class="user-detail" id="userDetail">
+          <div class="detail-empty">
+            <div class="detail-icon">+</div>
+            <strong>Select a user</strong>
+            <span>Account controls will appear here.</span>
+          </div>
+        </aside>
+      </div>
+    </article>
+
+    <article class="admin-card">
+      <div class="card-label">LICENSES</div>
+      <h2>Generate keys</h2>
+      <p class="card-copy">Create one or multiple registration keys for new accounts.</p>
+      <div class="form-row">
+        <input id="amount" class="field amount" type="number" min="1" max="100" value="1" aria-label="Amount">
+        <button id="generate" class="btn btn-primary" type="button">Generate keys</button>
+      </div>
+      <pre id="result" class="output"></pre>
+    </article>
+
+    <article class="admin-card">
+      <div class="card-label">KEY DATABASE</div>
+      <h2>License inventory</h2>
+      <p class="card-copy">Review generated keys and see which ones have already been redeemed.</p>
+      <div class="toolbar"><span id="keyCount" class="card-copy">Loading...</span><button id="refresh" class="btn" type="button">Refresh</button></div>
+      <div id="list" class="output key-list">Loading...</div>
+    </article>
+  </section>
+</main>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+let users = [];
+let selected = null;
+
+function escapeHtml(v) {
+  return String(v ?? "").replace(/[&<>'"]/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'
+  }[c]));
+}
+function formatDate(v) {
+  if (!v) return "Unknown";
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return "Unknown";
+  return d.toLocaleDateString("en-GB", {day:"2-digit",month:"2-digit",year:"numeric"});
+}
+function formatDateTime(v) {
+  if (!v) return "Unknown";
+  const d = new Date(v);
+  if (Number.isNaN(d.getTime())) return "Unknown";
+  return d.toLocaleString("en-GB", {day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+}
+function maskHwid(v) {
+  if (!v) return "-";
+  const s = String(v);
+  return s.length > 18 ? s.slice(0, 8) + "…" + s.slice(-6) : s;
+}
+function show(id, text, type="") {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "output" + (type ? " " + type : "");
+}
+async function api(url, options={}) {
+  const r = await fetch(url, {credentials:"same-origin", cache:"no-store", ...options});
+  let d = {};
+  try { d = await r.json(); } catch {}
+  if (!r.ok) throw new Error(d.error || "Request failed.");
+  return d;
+}
+
+function renderUsers() {
+  const list = $("userList");
+  if (!users.length) {
+    list.innerHTML = '<div class="empty-row">No user accounts found.</div>';
+    return;
+  }
+  list.innerHTML = users.map((u, i) => `
+    <button class="user-row ${selected && selected.username === u.username ? "selected" : ""}" data-index="${i}" type="button">
+      <span class="user-main"><b>${escapeHtml(u.username)}</b>${u.banned ? '<em>BANNED</em>' : ''}</span>
+      <span class="mono">${escapeHtml(u.createdIp || u.lastIp || "Unknown")}</span>
+      <span class="mono hwid">${escapeHtml(maskHwid(u.hwid))}</span>
+      <span>${escapeHtml(formatDate(u.createdAt))}</span>
+      <span class="coins">${Number(u.coins || 0)}</span>
+    </button>`).join("");
+
+  list.querySelectorAll(".user-row").forEach(row => {
+    row.onclick = () => {
+      selected = users[Number(row.dataset.index)];
+      renderUsers();
+      renderDetail();
+    };
+  });
+}
+
+function renderDetail() {
+  const u = selected;
+  const panel = $("userDetail");
+  if (!u) {
+    panel.innerHTML = `<div class="detail-empty"><div class="detail-icon">+</div><strong>Select a user</strong><span>Account controls will appear here.</span></div>`;
+    return;
+  }
+
+  panel.innerHTML = `
+    <div class="detail-top">
+      <div>
+        <p class="card-label">ACCOUNT</p>
+        <h3>${escapeHtml(u.username)}</h3>
+      </div>
+      <span class="status-pill ${u.banned ? "danger" : ""}">${u.banned ? "BANNED" : "ACTIVE"}</span>
+    </div>
+
+    <div class="detail-list">
+      <div><span>Username</span><strong>${escapeHtml(u.username)}</strong></div>
+      <div><span>IP</span><strong class="mono">${escapeHtml(u.createdIp || u.lastIp || "Unknown")}</strong></div>
+      <div><span>Last IP</span><strong class="mono">${escapeHtml(u.lastIp || "Unknown")}</strong></div>
+      <div><span>HWID</span><strong class="mono">${escapeHtml(u.hwid || "-")}</strong></div>
+      <div><span>Created</span><strong>${escapeHtml(formatDate(u.createdAt))}</strong></div>
+      <div><span>Current coins</span><strong>${Number(u.coins || 0)}</strong></div>
+    </div>
+
+    <div class="control-block">
+      <label class="field-label" for="detailCoins">COIN BALANCE</label>
+      <div class="coin-editor">
+        <input id="detailCoins" class="field" type="number" min="0" max="100000000" value="${Number(u.coins || 0)}">
+        <button id="saveCoins" class="btn btn-primary" type="button">Save coins</button>
+      </div>
+      <div id="detailMsg" class="detail-msg"></div>
+    </div>
+
+    <div class="control-block subscription-editor">
+      <label class="field-label" for="detailSubscription">SUBSCRIPTION</label>
+      <div class="subscription-current">Current: <strong>${escapeHtml(u.subscription?.plan || "None")}</strong>${u.subscription?.expiresAt ? ` · ${escapeHtml(formatDateTime(u.subscription.expiresAt))}` : ""}</div>
+      <div class="subscription-controls">
+        <select id="detailSubscription" class="field">
+          <option value="7d">7 Days</option>
+          <option value="30d">30 Days</option>
+          <option value="3m">3 Months</option>
+          <option value="lifetime">Lifetime</option>
+        </select>
+        <button id="saveSubscription" class="btn btn-primary" type="button">Set subscription</button>
+      </div>
+      <button id="deleteSubscription" class="btn btn-danger subscription-delete" type="button" ${u.subscription ? "" : "disabled"}>Delete subscription</button>
+    </div>
+
+    <div class="detail-actions">
+      <button id="toggleBan" class="btn ${u.banned ? "" : "btn-danger"}" type="button">${u.banned ? "Unban user" : "Ban user"}</button>
+      <button id="deleteHwid" class="btn" type="button">Delete HWID</button>
+    </div>`;
+
+  $("saveCoins").onclick = async () => {
+    const coins = Number($("detailCoins").value);
+    if (!Number.isInteger(coins) || coins < 0 || coins > 100000000) {
+      $("detailMsg").textContent = "Coin balance must be between 0 and 100,000,000.";
+      return;
+    }
+    $("saveCoins").disabled = true;
+    try {
+      const d = await api("/admin/coins/set", {
+        method:"POST",
+        body:new URLSearchParams({username:u.username, coins})
+      });
+      selected = d.user;
+      $("detailMsg").textContent = `Saved — ${d.user.coins} coins.`;
+      await loadUsers(false);
+    } catch (e) {
+      $("detailMsg").textContent = e.message;
+    } finally {
+      $("saveCoins").disabled = false;
+    }
+  };
+
+  $("saveSubscription").onclick = async () => {
+    const plan = $("detailSubscription").value;
+    $("saveSubscription").disabled = true;
+    try {
+      const d = await api("/admin/users/subscription/set", {
+        method:"POST",
+        body:new URLSearchParams({username:u.username, plan})
+      });
+      selected = d.user;
+      await loadUsers(false);
+    } catch(e) {
+      $("detailMsg").textContent = e.message;
+    } finally {
+      $("saveSubscription").disabled = false;
+    }
+  };
+
+  $("deleteSubscription").onclick = async () => {
+    if (!u.subscription) return;
+    if (!confirm(`Delete the subscription for ${u.username}?`)) return;
+    $("deleteSubscription").disabled = true;
+    try {
+      const d = await api("/admin/users/subscription/delete", {
+        method:"POST",
+        body:new URLSearchParams({username:u.username})
+      });
+      selected = d.user;
+      await loadUsers(false);
+    } catch(e) {
+      $("detailMsg").textContent = e.message;
+    } finally {
+      $("deleteSubscription").disabled = false;
+    }
+  };
+
+  $("toggleBan").onclick = async () => {
+    const next = !u.banned;
+    if (!confirm(`${next ? "Ban" : "Unban"} ${u.username}?`)) return;
+    $("toggleBan").disabled = true;
+    try {
+      const d = await api("/admin/users/ban", {
+        method:"POST",
+        body:new URLSearchParams({username:u.username, banned:String(next)})
+      });
+      selected = d.user;
+      await loadUsers(false);
+    } catch(e) {
+      $("detailMsg").textContent = e.message;
+    } finally {
+      $("toggleBan").disabled = false;
+    }
+  };
+
+  $("deleteHwid").onclick = async () => {
+    if (!u.hwid) {
+      $("detailMsg").textContent = "This account has no HWID linked.";
+      return;
+    }
+    if (!confirm(`Delete the HWID for ${u.username}?`)) return;
+    $("deleteHwid").disabled = true;
+    try {
+      const d = await api("/admin/users/delete-hwid", {
+        method:"POST",
+        body:new URLSearchParams({username:u.username})
+      });
+      selected = d.user;
+      await loadUsers(false);
+    } catch(e) {
+      $("detailMsg").textContent = e.message;
+    } finally {
+      $("deleteHwid").disabled = false;
+    }
+  };
+}
+
+async function loadUsers(clearSelection=false) {
+  try {
+    const d = await api("/admin/users");
+    users = d.users || [];
+    if (clearSelection) selected = null;
+    if (selected) selected = users.find(x => x.username === selected.username) || null;
+    renderUsers();
+    renderDetail();
+  } catch(e) {
+    $("userList").innerHTML = `<div class="empty-row error-text">${escapeHtml(e.message)}</div>`;
+  }
+}
+
+async function refreshLicenses() {
+  try {
+    const d = await api("/admin/licenses");
+    $("keyCount").textContent = `${d.licenses.length} total key${d.licenses.length===1?'':'s'}`;
+    $("list").innerHTML = d.licenses.length
+      ? d.licenses.map(x => `<div class="key-row"><span>${escapeHtml(x.key)}</span><span class="key-status ${x.used?'used':'available'}">${x.used?'USED · '+escapeHtml(x.usedBy||'unknown'):'AVAILABLE'}</span></div>`).join("")
+      : "No licenses generated yet.";
+  } catch(e) { show("list", e.message, "error"); $("keyCount").textContent = "Unable to load"; }
+}
+
+$("generate").onclick = async () => {
+  try {
+    const amount = Math.max(1, Math.min(100, Number($("amount").value) || 1));
+    const d = await api("/admin/licenses", {method:"POST", body:new URLSearchParams({amount})});
+    show("result", d.licenses.join("\n"), "success");
+    await refreshLicenses();
+  } catch(e) { show("result", e.message, "error"); }
+};
+
+$("refresh").onclick = refreshLicenses;
+$("refreshUsers").onclick = () => loadUsers(false);
+loadUsers(true);
+refreshLicenses();
+</script>
+<script src="./nav.js"></script>
+<footer><div class="wrap">© 2026 NexusClient</div></footer>
+</body>
+</html>

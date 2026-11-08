@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusClient — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" type="image/png" href="./img/logo.png">
+  <link rel="stylesheet" href="./css/dashboard.css">
+  <link rel="stylesheet" href="./css/topbar.css">
+  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body>
+  <header class="topbar"><div class="wrap topbar-inner"><a class="top-logo" href="/dashboard.html"><img src="./img/logo.png" alt="NexusClient"><span>NexusClient</span></a><nav class="topnav" data-topnav></nav><div data-auth-actions><form action="/logout" method="POST"><button class="nav-logout" type="submit">Log out</button></form></div></div></header>
+
+  <main class="dashboard">
+    <div class="wrap">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">DASHBOARD</p>
+          <h1>Welcome back, <span id="username"></span> !</h1>
+        </div>
+        <div class="hero-logo" id="profile-avatar" aria-label="Profile picture"><span class="avatar-initial">?</span></div>
+      </section>
+
+      <section class="grid">
+        <article class="card license-card">
+          <div class="card-top">
+            <div>
+              <p class="label">LICENSE</p>
+              <h2 id="license">Loading...</h2>
+            </div>
+            
+          </div>
+          <div class="license-line"></div>
+          <div class="meta">
+            <span>Username</span>
+            <strong id="account-name">...</strong>
+          </div>
+          <div class="meta subscription-meta">
+            <span>Subscription time</span>
+            <strong id="subscription-time">No active subscription</strong>
+          </div>
+        </article>
+
+
+      </section>
+    </div>
+  </main>
+
+  <footer><div class="wrap">© 2026 NexusClient</div></footer>
+  <script src="./js/dashboard.js"></script>
+  <script src="./nav.js"></script>
+</body>
+</html>

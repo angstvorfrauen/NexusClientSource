@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NexusClient</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" type="image/png" href="./img/logo.png" />
+<link rel="stylesheet" href="./css/index.css" />
+<link rel="stylesheet" href="./css/topbar.css" />
+  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="top-logo" href="./index.html"><img src="./img/logo.png" alt="NexusClient"><span>NexusClient</span></a>
+    <nav class="topnav" data-topnav></nav>
+    <div data-auth-actions><div class="nav-actions"><a class="btn" href="./login.html">Login</a><a class="btn" href="./register.html">Create Account</a></div></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>NexusClient 1.0.0</h1>
+    <p>Undetected Couter Strike 2 external cheat!</p>
+    <div class="hero-actions">
+      <a class="btn" href="./dashboard.html">Dashboard</a>
+      <a class="btn" href="https://discord.gg/6ZAYPuwCnk">Join our Discord</a>
+    </div>
+  </div>
+</section>
+
+<section class="showcase">
+  <div class="wrap">
+    <div class="showcase-grid">
+      <div class="shot shot-1">
+        <div class="shot-image" data-index="0" tabindex="0" role="button" aria-label="Presets vergrößern">
+          <img src="./showcase/1.png" />
+          <span class="shot-tag">Visuals</span>
+          <span class="shot-zoom">⤢</span>
+        </div>
+        <div class="shot-caption">
+          <h3>High Quality Visuals</h3>
+          <p>Example features for visuals are Box, Corner ESP, Snaplines or Healthbar.</p>
+        </div>
+      </div>
+      <div class="shot shot-2">
+        <div class="shot-image" data-index="1" tabindex="0" role="button" aria-label="Ebenen vergrößern">
+          <img src="./showcase/2.png" />
+          <span class="shot-tag">Menu</span>
+          <span class="shot-zoom">⤢</span>
+        </div>
+        <div class="shot-caption">
+          <h3>Menu Style</h3>
+          <p>The Menu right now is the normal style of IMGui will be soon changed.</p>
+        </div>
+      </div>
+      <div class="shot shot-3">
+        <div class="shot-image" data-index="2" tabindex="0" role="button" aria-label="Export vergrößern">
+          <img src="./showcase/3.png" />
+          <span class="shot-tag">Bypass</span>
+          <span class="shot-zoom">⤢</span>
+        </div>
+        <div class="shot-caption">
+          <h3>DLL Internal</h3>
+          <p>We are building already on the Internal DLL cheat Version VAC Bypass, Rage Cheat and more.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Vorheriges Bild">‹</button>
+  <div class="lightbox-frame" id="lightboxFrame">
+    <img id="lightboxImg" src="" alt="" />
+    <span class="lightbox-tag" id="lightboxTag"></span>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Nächstes Bild">›</button>
+</div>
+
+<footer>
+  <div class="wrap">© 2026 NexusClient</div>
+</footer>
+
+<script src="./js/index.js"></script>
+<script src="./nav.js"></script>
+</body>
+</html>

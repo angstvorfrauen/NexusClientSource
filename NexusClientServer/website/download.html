@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexusClient — Download</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" href="./img/logo.png">
+<link rel="stylesheet" href="./css/dashboard.css"><link rel="stylesheet" href="./css/topbar.css">
+<style>
+.download-card{display:flex;align-items:center;justify-content:space-between;gap:30px;background:radial-gradient(circle at 90% 0,rgba(255,0,0,.08),transparent 30%),linear-gradient(145deg,#121212,#090909)}
+.download-mark{width:56px;height:56px;border:1px solid rgba(255,0,0,.2);background:rgba(255,0,0,.06);border-radius:14px;display:grid;place-items:center;font-size:22px;margin-bottom:20px}
+.download-btn{display:inline-flex;align-items:center;gap:18px;text-decoration:none;background:var(--red);color:#fff;padding:13px 18px;border-radius:8px;font-weight:700;white-space:nowrap;box-shadow:0 8px 30px rgba(255,0,0,.13)}.download-btn:hover{filter:brightness(1.08)}
+.notice{margin-top:20px;color:var(--text-dim);font-size:13px}
+@media(max-width:700px){.download-card{display:block}.download-btn{margin-top:24px}}
+</style>  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner"><a class="top-logo" href="/dashboard.html"><img src="./img/logo.png"><span>NexusClient</span></a><nav class="topnav" data-topnav></nav><div data-auth-actions></div></div></header>
+<main class="dashboard"><div class="wrap">
+<section class="hero"><div><p class="eyebrow">DOWNLOAD</p><h1>Download<span> NexusClient</span></h1></div></section>
+<article class="card download-card">
+<div><div class="download-mark">↓</div><p class="label">NEXUSCLIENT</p><h2>NexusClient</h2><p class="card-text" id="download-desc">Download the newest NexusClient Loader here.</p></div>
+<a class="download-btn" id="download-btn" href="/download/loader">Download<span>→</span></a>
+</article>
+<p id="error" class="notice"></p>
+</div></main>
+<script src="/nav.js"></script>
+<script>
+(async()=>{
+ const r=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});
+ if(!r.ok)return location='/login.html';
+ const d=await r.json(),u=d.user,active=u.role==='admin'||!!u.hasActiveSubscription;
+ const btn=document.getElementById('download-btn');
+ if(!active){
+   btn.style.display='none';
+   document.getElementById('error').textContent='You need an active subscription to download the loader. Visit the Store to purchase one.';
+ }
+})();
+</script><footer><div class="wrap">© 2026 NexusClient</div></footer>
+</body></html>

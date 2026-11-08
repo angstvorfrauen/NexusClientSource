@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>NexusClient</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" type="image/png" href="./img/logo.png" />
+
+  <link rel="stylesheet" href="./css/login.css" />
+  <link rel="stylesheet" href="./css/footer.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="logo" href="./index.html">
+          <img
+            class="logo-mark"
+            src="./img/logo.png"
+            alt="NexusClient Logo"
+          />
+
+
+      <span>NexusClient</span>
+    </a>
+  </nav>
+</div>
+
+
+  </header>
+
+  <main class="auth-page">
+
+
+<div class="auth-card">
+
+  <div class="auth-header">
+
+    <div class="auth-icon">
+      <img
+        src="./img/logo.png"
+        alt="NexusClient"
+      />
+    </div>
+
+    <h1>Welcome back</h1>
+
+    <p>
+      Sign in to your NexusClient account.
+    </p>
+
+  </div>
+
+  <form
+    action="/login"
+    method="POST"
+    id="login-form"
+    novalidate
+  >
+
+    <div class="form-group">
+
+      <label for="username">
+        Username
+      </label>
+
+      <input
+        id="username"
+        name="username"
+        type="text"
+        placeholder="Enter your username"
+        autocomplete="username"
+        required
+      />
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="password">
+        Password
+      </label>
+
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        required
+      />
+
+    </div>
+
+    <div class="login-options">
+
+      <label class="remember">
+
+        <input
+          type="checkbox"
+          id="save-login"
+        />
+
+        <span class="check-box"></span>
+
+        <span class="remember-text">
+          Save login
+        </span>
+
+      </label>
+
+      <a href="./forgot-password.html">
+        Forgot password?
+      </a>
+
+    </div>
+
+    <button
+      class="btn btn-primary submit-btn"
+      type="submit"
+      id="login-button"
+      disabled
+    >
+
+      <span class="button-text">
+        Sign In
+      </span>
+
+      <span class="button-arrow">
+        →
+      </span>
+
+    </button>
+
+  </form>
+
+  <div class="auth-footer">
+
+    <span>
+      Don't have an account?
+    </span>
+
+    <a href="./register.html">
+      Create account
+    </a>
+
+  </div>
+
+</div>
+
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      © 2026 NexusClient
+    </div>
+  </footer>
+
+  <script src="./js/login.js"></script>
+
+</body>
+</html>

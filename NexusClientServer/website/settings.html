@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexusClient — Settings</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" href="./img/logo.png">
+<link rel="stylesheet" href="./css/dashboard.css"><link rel="stylesheet" href="./css/topbar.css"><link rel="stylesheet" href="./css/settings.css">
+  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body class="settings-page">
+<header class="topbar"><div class="wrap topbar-inner"><a class="top-logo" href="/dashboard.html"><img src="./img/logo.png" alt=""><span>NexusClient</span></a><nav class="topnav" data-topnav></nav><div data-auth-actions></div></div></header>
+<main class="dashboard"><div class="wrap">
+<section class="hero"><div><p class="eyebrow">SETTINGS</p><h1>Account <span>Settings</span></h1><p class="subtitle">Manage your profile, account details and connected device.</p></div></section>
+<div class="settings-grid">
+<section class="card profile-card">
+<p class="label">PROFILE</p>
+<div class="profile-head">
+<div class="avatar-wrap"><span class="avatar-initial">?</span><img id="avatar" src="./img/logo.png" alt="Profile picture"><label class="avatar-edit" for="avatar-input">Change</label><input id="avatar-input" type="file" accept="image/png,image/jpeg,image/webp"></div>
+<div><h2 id="profile-name">...</h2><p id="profile-role" class="muted">User account</p></div>
+</div>
+<form id="profile-form">
+<div class="form-grid">
+<label>Username<input id="username" maxlength="24" required></label>
+<label>E-mail<input id="email" type="email" maxlength="254"></label>
+</div>
+<button class="primary-btn" type="submit">Save changes <span>→</span></button>
+<p id="profile-msg" class="form-msg"></p>
+</form>
+</section>
+<section class="card device-card">
+<p class="label">USER DEVICE</p>
+<h2>Security information</h2>
+<div class="info-row"><span>IP address</span><strong id="ip">Unknown</strong></div>
+<div class="info-row"><span>Device</span><strong id="device">Unknown</strong></div>
+<div class="info-row"><span>Account created</span><strong id="created">Unknown</strong></div>
+
+</section>
+<section class="card security-card"><p class="label">ACCOUNT SECURITY</p><h2>Two-factor authentication</h2><p class="card-text">Protect your account with a 6-digit code. You will only be asked again when a new or untrusted device signs in.</p><div class="info-row twofa-status-row"><span>Status</span><strong id="twofa-status">Disabled</strong><span id="twofa-check" class="twofa-check" hidden aria-label="2FA enabled">✓</span></div><div id="twofa-setup" class="twofa-panel"><button id="twofa-enable" class="primary-btn" type="button">Enable 2FA</button></div><div id="twofa-verify" class="twofa-panel" hidden><label>Verification code<input id="twofa-code" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code"></label><button id="twofa-confirm" class="primary-btn" type="button">Verify & enable</button></div><p id="twofa-msg" class="form-msg"></p></section><section class="card danger-card">
+<p class="label">DANGER ZONE</p><h2>Delete account</h2>
+<p class="card-text">This permanently deletes your account, license data, coins and subscription. This action cannot be undone.</p>
+<button id="delete-account" class="danger-btn" type="button">Delete my account</button>
+<p id="delete-msg" class="form-msg"></p>
+</section>
+</div></div></main>
+<script src="/nav.js"></script><script src="/js/settings.js"></script>
+<footer><div class="wrap">© 2026 NexusClient</div></footer>
+</body></html>

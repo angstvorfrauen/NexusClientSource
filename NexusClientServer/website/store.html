@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexusClient — Store</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global-font.css">
+<link rel="icon" href="./img/logo.png">
+<link rel="stylesheet" href="./css/dashboard.css"><link rel="stylesheet" href="./css/topbar.css">
+<style>
+html,body,.store-grid,.product-card,.modal,.modal button,.timeline-opt,.fixed-row,.field-label,.notice{font-family:"Inter",sans-serif !important}
+.top-logo,.topnav a,.coin-balance,.modal h2,.product-card h2,.t-name,.t-price,.from-price{font-family:"Space Grotesk",sans-serif !important}
+.modal-close{font-family:"Inter",sans-serif}
+.store-grid{display:grid;grid-template-columns:minmax(0,520px);justify-content:start}.product-card{cursor:pointer;transition:.2s;background:radial-gradient(circle at 90% 0,rgba(255,0,0,.08),transparent 35%),linear-gradient(145deg,#121212,#090909)}
+.product-card:hover{border-color:#444;transform:translateY(-2px)}
+.product-icon{width:56px;height:56px;border-radius:14px;background:rgba(255,0,0,.08);border:1px solid rgba(255,0,0,.2);display:grid;place-items:center;margin-bottom:20px;font-size:23px}
+.product-card h2{font-size:24px;margin-bottom:8px}.from-price{font:700 15px "Space Grotesk";margin-top:18px}.from-price small{color:var(--text-dim);font-size:11px}
+.notice{margin-top:20px;color:var(--text-dim);font-size:13px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.64);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.modal-overlay.open{display:flex}
+.modal{width:min(480px,100%);border:1px solid var(--line);background:linear-gradient(145deg,#121212,#090909);border-radius:14px;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start}.modal-head h2{font-size:22px}.modal-close{background:none;border:0;color:var(--text-dim);font-size:21px;cursor:pointer}.modal-sub{color:var(--text-dim);font-size:13px;margin:7px 0 22px}
+.fixed-rows{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:22px}.fixed-row{display:flex;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--line);font-size:13px}.fixed-row:last-child{border-bottom:0}.fixed-row span:first-child{color:var(--text-dim)}
+.field-label{font-size:9px;letter-spacing:.14em;font-weight:800;color:var(--text-dim);margin-bottom:10px}.timeline-options{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.timeline-opt{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#0d0d0d;transition:.15s}.timeline-opt:hover{border-color:#3a3a3a}.timeline-opt.selected{border-color:var(--red);background:rgba(255,0,0,.06)}
+.t-name{font-weight:650;font-size:13px}.t-sub{color:var(--text-dim);font-size:11px;margin-top:2px}.t-price{font:700 15px "Space Grotesk"}.t-price small{color:var(--text-dim);font-size:10px}
+.modal-footer{display:flex;justify-content:space-between;align-items:center;gap:14px}.balance-note{font-size:12px;color:var(--text-dim)}.buy{border:0;background:var(--red);color:#fff;padding:12px 20px;border-radius:8px;font-weight:700;cursor:pointer}.buy:disabled{opacity:.45;cursor:not-allowed}.modal-msg{margin-top:14px;text-align:center;color:var(--text-dim);font-size:12px}
+@media(max-width:600px){.store-grid{grid-template-columns:1fr}.modal-footer{align-items:stretch;flex-direction:column}.buy{width:100%}}
+</style>  <link rel="stylesheet" href="./css/footer.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner"><a class="top-logo" href="/dashboard.html"><img src="./img/logo.png"><span>NexusClient</span></a><nav class="topnav" data-topnav></nav><div data-auth-actions></div></div></header>
+<main class="dashboard"><div class="wrap">
+<section class="hero"><div><p class="eyebrow">STORE</p><h1>Choose your <span>product</span></h1></div></section>
+<section class="store-grid">
+<article class="card product-card" id="openStore">
+<div class="product-icon">+</div><p class="label">NEXUSCLIENT</p><h2>Counter-Strike 2</h2>
+<p class="card-text">Select your cheat subscription.</p>
+<div class="from-price">From 5 <small>coins</small></div>
+</article>
+</section>
+<p class="notice" id="notice"></p>
+</div></main>
+
+<div class="modal-overlay" id="overlay"><div class="modal">
+<div class="modal-head"><h2>Counter-Strike 2</h2><button class="modal-close" id="closeModal">&times;</button></div>
+<p class="modal-sub">Select a duration and confirm your purchase.</p>
+<div class="fixed-rows"><div class="fixed-row"><span>Product</span><span>Counter-Strike 2</span></div><div class="fixed-row"><span>Payment</span><span>Coins</span></div></div>
+<p class="field-label">DURATION</p>
+<div class="timeline-options">
+<div class="timeline-opt" data-plan="7d" data-coins="5"><div><div class="t-name">7 Days</div><div class="t-sub">Short-term access</div></div><div class="t-price">5 <small>coins</small></div></div>
+<div class="timeline-opt" data-plan="30d" data-coins="15"><div><div class="t-name">30 Days</div><div class="t-sub">Most popular</div></div><div class="t-price">15 <small>coins</small></div></div>
+<div class="timeline-opt" data-plan="3m" data-coins="35"><div><div class="t-name">3 Months</div><div class="t-sub">Best value</div></div><div class="t-price">35 <small>coins</small></div></div>
+<div class="timeline-opt" data-plan="lifetime" data-coins="100"><div><div class="t-name">Lifetime</div><div class="t-sub">One-time, never expires</div></div><div class="t-price">100 <small>coins</small></div></div>
+</div>
+<div class="modal-footer"><span class="balance-note" id="balanceNote"></span><button class="buy" id="confirmBuy" disabled>Purchase</button></div>
+<p class="modal-msg" id="modalMsg"></p>
+</div></div>
+
+<script src="/nav.js"></script>
+<script>
+(async()=>{
+ const r=await fetch('/api/me',{credentials:'same-origin',cache:'no-store'});
+ if(!r.ok)return location='/login.html';
+ const d=await r.json(),u=d.user,isAdmin=u.role==='admin',balance=Number(u.coins||0);
+ const overlay=document.getElementById('overlay'),open=document.getElementById('openStore'),close=document.getElementById('closeModal'),buy=document.getElementById('confirmBuy'),note=document.getElementById('balanceNote'),msg=document.getElementById('modalMsg');
+ const opts=document.querySelectorAll('.timeline-opt');let selectedPlan=null;
+ function openModal(){if(isAdmin)return;msg.textContent='';selectedPlan=null;opts.forEach(x=>x.classList.remove('selected'));buy.disabled=true;note.textContent=`Balance: ${balance} coins`;overlay.classList.add('open')}
+ function closeModal(){overlay.classList.remove('open')}
+ open.onclick=openModal;close.onclick=closeModal;overlay.onclick=e=>{if(e.target===overlay)closeModal()};
+ opts.forEach(o=>o.onclick=()=>{opts.forEach(x=>x.classList.remove('selected'));o.classList.add('selected');selectedPlan=o.dataset.plan;buy.disabled=false});
+ buy.onclick=async()=>{if(!selectedPlan)return;buy.disabled=true;const r=await fetch('/api/store/purchase',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({plan:selectedPlan})});const x=await r.json();if(x.success){msg.textContent=`Purchase successful. Remaining balance: ${x.coins} coins.`;document.getElementById('notice').textContent=`Balance: ${x.coins} coins`;setTimeout(closeModal,1400)}else{msg.textContent=x.error||'Purchase failed.';buy.disabled=false}};
+ if(isAdmin){open.style.opacity='.5';open.style.cursor='not-allowed'}
+})();
+</script>
+<footer><div class="wrap">© 2026 NexusClient</div></footer>
+</body></html>

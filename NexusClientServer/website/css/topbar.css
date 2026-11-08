@@ -1,0 +1,37 @@
+ .topbar{
+  height:74px;border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(10,10,10,.8);backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);position:sticky;top:0;z-index:50;
+}
+.topbar-inner{height:100%;display:flex;align-items:center;gap:24px}
+.top-logo{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.15rem;margin-right:auto}
+.top-logo img{width:32px;height:32px;object-fit:contain;border-radius:6px}
+.topnav{display:flex;align-items:center;gap:4px}
+.topnav a{color:var(--text-dim);text-decoration:none;padding:9px 12px;border:1px solid transparent;border-radius:8px;font-family:"Inter",sans-serif;font-size:13px;font-weight:600;white-space:nowrap;transition:.2s}
+.topnav a:hover,.topnav a.active{color:var(--text);background:rgba(255,255,255,.035);border-color:var(--line)}
+.account-actions{display:flex;align-items:center;gap:8px}
+.coin-balance{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:rgba(10,10,10,.5);color:var(--text);font-family:"Space Grotesk",sans-serif;font-size:13px;font-weight:700}
+.coin-dot{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 12px rgba(255,0,0,.45)}
+.nav-settings,.nav-logout{border:1px solid var(--line);background:rgba(10,10,10,.5);color:var(--text);padding:9px 12px;border-radius:8px;font-family:"Inter",sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+.nav-settings{text-decoration:none;display:inline-flex;align-items:center}
+.nav-settings:hover,.nav-logout:hover{border-color:#444;background:#151515}
+
+.mobile-nav{display:none;position:relative}
+.mobile-nav-toggle{width:42px;height:42px;border:1px solid var(--line);border-radius:9px;background:rgba(10,10,10,.65);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer}
+.mobile-nav-toggle span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:.2s}
+.mobile-nav-panel{position:absolute;right:0;top:52px;width:210px;padding:8px;border:1px solid var(--line);border-radius:12px;background:rgba(12,12,12,.96);backdrop-filter:blur(18px);box-shadow:0 20px 60px rgba(0,0,0,.45);display:none}
+.mobile-nav-panel a,.mobile-nav-panel form button{display:block;width:100%;padding:11px 12px;border:0;border-radius:8px;background:transparent;color:var(--text-dim);font:600 13px "Inter",sans-serif;text-align:left;cursor:pointer;text-decoration:none}
+.mobile-nav-panel a:hover,.mobile-nav-panel form button:hover{background:rgba(255,255,255,.045);color:var(--text)}
+.mobile-nav.open .mobile-nav-panel{display:block}
+.mobile-nav-panel form{margin:0}
+
+@media(max-width:1050px){
+  .topnav,.account-actions{display:none}
+  .mobile-nav{display:block}
+}
+@media(max-width:700px){
+  .topbar{height:68px}
+  .top-logo{font-size:1.05rem}
+  .top-logo img{width:30px;height:30px}
+  .topbar-inner{gap:10px}
+}

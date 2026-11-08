@@ -1,0 +1,7 @@
+html,body{min-height:100%;}
+body{min-height:100vh;display:flex;flex-direction:column;}
+body > main{flex:1;}
+body > .dashboard{flex:1;}
+.admin-wrap{flex:1;}
+.auth-page{flex:1;}
+footer{margin-top:auto !important;border-top:1px solid var(--line);padding:22px 0;color:var(--text-dim);font-size:12px;text-align:center;}
